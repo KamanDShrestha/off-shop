@@ -1,8 +1,10 @@
 //ES module integrated through changing the type in package.json
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 import products from './data/products.js';
 
-const port = 8000;
+const port = process.env.PORT || 8001;
 const app = express();
 
 app.get('/', (req, res) => {
@@ -21,5 +23,5 @@ app.get(`/api/products/:name`, (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log('Running on port 5000');
+  console.log(`Running on port ${port}`);
 });
