@@ -3,9 +3,17 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 import products from './data/products.js';
-
+import { connect } from 'mongoose';
+import connectDB from './db.js';
 const port = process.env.PORT || 8001;
+
+connectDB(); //connecting to the database
 const app = express();
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 app.get('/', (req, res) => {
   res.send('Hello world!');
@@ -17,7 +25,7 @@ app.get('/api/products', (req, res) => {
 });
 
 //route for serving a specific products
-app.get(`/api/products/:name`, (req, res) => {
+app.get('/api/products/:name', (req, res) => {
   const product = products.find((p) => p.name === req.params.name);
   res.json(product);
 });

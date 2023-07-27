@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import products from '../../public/data/products';
+import { Product } from '../../public/data/products';
 import Ratings from '../components/Ratings';
+import Button from '../components/Button';
+import axios from 'axios';
 const ProductDetails = () => {
+  const [product, setProduct] = useState({} as Product);
   const { name } = useParams();
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get(
+        `http://localhost:8000/api/products/${name}`
+      );
+      setProduct(data);
+    };
+    fetchProduct();
+  }, [name]);
   console.log(name);
-  const product = products.find((product) => product.name === name);
+
   console.log(product);
   return (
     <div className='flex flex-col my-3  mx-20 gap-10 '>
@@ -42,6 +56,9 @@ const ProductDetails = () => {
             </div>
             <div className=' font-medium'>Category : {product?.category}</div>
           </div>
+          <Button className='px-3 py-2 my-5 w-32 outline-none rounded-lg bg-stone-900 text-stone-50  drop-shadow-sm '>
+            Add to Cart
+          </Button>
           <span className='text-xs italic bottom-0 absolute right-0 md:left-0'>
             from {product?.brand} with ❤️
           </span>
