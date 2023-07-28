@@ -8,18 +8,18 @@ import Button from '../components/Button';
 import axios from 'axios';
 const ProductDetails = () => {
   const [product, setProduct] = useState({} as Product);
-  const { name } = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchProduct = async () => {
       const { data } = await axios.get(
-        `http://localhost:8000/api/products/${name}`
+        `http://localhost:8000/api/products/${id}`
       );
       setProduct(data);
     };
     fetchProduct();
-  }, [name]);
-  console.log(name);
+  }, [id]);
+  console.log(id);
 
   console.log(product);
   return (
@@ -29,7 +29,7 @@ const ProductDetails = () => {
           <span>Home </span>
         </Link>
         <span> {'>'} </span>
-        <Link to={`/product/${name}`}>
+        <Link to={`/product/${id}`}>
           <span className=''>{product?.name}</span>
         </Link>
       </div>

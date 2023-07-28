@@ -8,12 +8,13 @@ interface Props {
 }
 
 const ProductCard = ({ product }: Props) => {
+  console.log(product);
   return (
     <div className='flex flex-col w-50 gap-3 shadow-lg bg-stone-50'>
       <img src={product.image} className='h-70' />
       <div className='p-5'>
         <div className='text-lg flex-wrap font-semibold whitespace-nowrap overflow-hidden text-ellipsis'>
-          <Link to={`/product/${product.name}`}>{product.name}</Link>
+          <Link to={`/products/${product._id}`}>{product.name}</Link>
         </div>
         <p className='text-md'>{product.brand}</p>
         <p className='text-sm'>${product.price}</p>

@@ -14,6 +14,7 @@ const Home = () => {
     };
     fetchProducts();
   }, []);
+  console.log(products);
 
   return (
     <div className='flex flex-col my-3  mx-20 '>
