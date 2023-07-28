@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import products from './data/products.js';
 import { connect } from 'mongoose';
-import connectDB from './db.js';
+import connectDB from './config/db.js';
 const port = process.env.PORT || 8001;
 
 connectDB(); //connecting to the database
