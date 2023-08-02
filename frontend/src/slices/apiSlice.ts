@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 //as we are dealing with backend, this is implemented as root slice from which other slices would be built upon
 //so as we need to fetch from backend that's asynchronous we are using createApi rather than createSlice
 //fetchBaseQuery to make request with the backend API
