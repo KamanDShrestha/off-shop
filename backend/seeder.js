@@ -37,7 +37,7 @@ const importData = async () => {
     //inserting the products into the database
     await Product.insertMany(sampleProducts);
     console.log('Data Imported! Nicee!');
-    process.exit();
+   
   } catch (error) {
     console.error(`${error}`.red.inverse);
     process.exit(1);

@@ -7,6 +7,9 @@ import { connect } from 'mongoose';
 import connectDB from './config/db.js';
 import router from './routes/productRoutes.js';
 
+//using custom error handler
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+
 const port = process.env.PORT || 8001;
 
 connectDB(); //connecting to the database
@@ -23,6 +26,9 @@ app.get('/', (req, res) => {
 
 //using the productRoutes when the request has URL of api/products
 app.use('/api/products', router);
+
+app.use(errorHandler);
+app.use(notFound);
 
 app.listen(port, () => {
   console.log(`Running on port ${port}`);
