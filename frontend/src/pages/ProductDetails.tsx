@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 import Ratings from '../components/Ratings';
@@ -34,6 +34,7 @@ const ProductDetails = () => {
 
   const { data: product, isLoading, error } = useGetSpecificProductQuery(id!);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handleIncrement() {
     if (quantity >= (product?.countInStock as number)) return;
@@ -112,7 +113,10 @@ const ProductDetails = () => {
 
               <button
                 className='px-3 py-2 my-6 w-32 outline-none rounded-lg bg-stone-900 text-stone-50  drop-shadow-sm '
-                onClick={() => dispatch(addToCart({ ...product, quantity }))}
+                onClick={() => {
+                  dispatch(addToCart({ ...product, quantity }));
+                  navigate('/cart');
+                }}
               >
                 Add to Cart
               </button>

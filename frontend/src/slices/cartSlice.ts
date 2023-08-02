@@ -6,6 +6,28 @@ const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart')!)
   : { cartItems: [] };
 
+export interface CartItemDataType {
+  _id: string;
+  name: string;
+  image: string;
+  description: string;
+  brand: string;
+  category: string;
+  price: number;
+  countInStock: number;
+  rating: number;
+  numReviews: number;
+  quantity: number;
+}
+
+export interface CartDataType {
+  cartItems: CartItemDataType[];
+  itemsPrice?: number;
+  shippingPrice?: number;
+  taxPrice?: number;
+  totalPrice?: number;
+}
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -27,9 +49,15 @@ const cartSlice = createSlice({
       }
       return updateCard(state);
     },
+    deleteCart(state, action) {
+      state.cartItems = state.cartItems.filter(
+        (cartItem: CartItemDataType) => cartItem._id !== action.payload
+      );
+      return updateCard(state);
+    },
   },
 });
 
 console.log(cartSlice);
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, deleteCart } = cartSlice.actions;
 export default cartSlice.reducer;
