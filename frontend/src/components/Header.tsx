@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import logo from '../assets/logo.png';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { faBurger } from '@fortawesome/free-solid-svg-icons';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Store } from '../store';
+import { useLogoutMutation } from '../slices/userApiSlice';
+import { logoutFrontend } from '../slices/authSlice';
+import { CartItemDataType } from '../slices/cartSlice';
 const Header = () => {
   const [isHamburger, setIsHamburger] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
@@ -15,14 +19,35 @@ const Header = () => {
     setIsOpened((open) => !open);
   }
 
+  const navigate = useNavigate();
+
+  const { userInfo } = useSelector((state: Store) => state.auth);
+  console.log(userInfo);
+  //taking out the methods for user logout
+  const [logout, { isLoading }] = useLogoutMutation();
+
+  // handling the logout for the frontend
+  const dispatch = useDispatch();
+
   //getting the total value from the cart
-  const totalItemsInCart = useSelector((state: any) =>
+  const totalItemsInCart = useSelector((state: Store) =>
     state.cart.cartItems.reduce(
-      (sum: number, item: any) => sum + item.quantity,
+      (sum: number, item: CartItemDataType) => sum + item.quantity,
       0
     )
   );
-  console.log(totalItemsInCart);
+
+  async function handleSelect(e: React.ChangeEvent<HTMLSelectElement>) {
+    if (e.target.value === 'profile') {
+      navigate('/profile');
+      return;
+    } else {
+      await logout(userInfo).unwrap();
+      dispatch(logoutFrontend());
+      navigate('login');
+    }
+  }
+
   return (
     <div
       className={`flex justify-between items-center p-3 ${
@@ -43,7 +68,23 @@ const Header = () => {
           )}
         </NavLink>
 
-        <NavLink to={'signin'}>Sign Up</NavLink>
+        {userInfo ? (
+          <div>
+            <select
+              name={userInfo.name}
+              id='loggedInUser'
+              onChange={handleSelect}
+            >
+              <option>{userInfo.name}</option>
+              <option onClick={() => navigate('/profile')} value={'profile'}>
+                Profile
+              </option>
+              <option value={'logout'}>Logout</option>
+            </select>
+          </div>
+        ) : (
+          <NavLink to={'signin'}>Sign Up</NavLink>
+        )}
       </div>
       <div className='space-x-4 block min-[320px]:hidden relative'>
         {!isHamburger ? (
@@ -55,7 +96,7 @@ const Header = () => {
         ) : (
           <FontAwesomeIcon
             icon={faClose}
-            className='h-7 absolute bottom-16 left-44'
+            className='absolute h-7 bottom-16 left-44'
             onClick={hamBurgerClicked}
           />
         )}
@@ -69,7 +110,21 @@ const Header = () => {
                 </span>
               )}
             </NavLink>
-            <NavLink to={'signin'}>Sign Up</NavLink>
+            {userInfo ? (
+              <div>
+                <select
+                  name={userInfo.name}
+                  id='loggedInUser'
+                  onChange={handleSelect}
+                >
+                  <option>{userInfo.name}</option>
+                  <option value={'profile'}>Profile</option>
+                  <option value={'logout'}>Logout</option>
+                </select>
+              </div>
+            ) : (
+              <NavLink to={'signin'}>Sign Up</NavLink>
+            )}
           </>
         )}
       </div>

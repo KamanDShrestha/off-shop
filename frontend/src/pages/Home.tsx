@@ -28,10 +28,10 @@ const Home = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <h1>{error?.data?.message}</h1>
+        <h1>{error?.data.message}</h1>
       ) : (
-        <div className='flex flex-col my-3  mx-20 '>
-          <h1 className=' text-3xl font-bold'>Featured Products</h1>
+        <div className='flex flex-col mx-20 my-3 '>
+          <h1 className='text-3xl font-bold '>Featured Products</h1>
           <ProductLayout>
             {products?.map((product) => (
               <ProductCard product={product} key={product._id} />
